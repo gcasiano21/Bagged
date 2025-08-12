@@ -1,4 +1,4 @@
-# Disc Bag Analyzer
+# Bagged
 
 A mobile app using Expo for disc golf players looking to track the discs in their bag, log throws, and get disc recommendations.
 
