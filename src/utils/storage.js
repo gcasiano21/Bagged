@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const DISCS_KEY = '@discs_v1';
+const DISCS_KEY = '@discs';
 
 export async function saveDiscsToStorage(discs) {
   try {
@@ -13,8 +13,13 @@ export async function saveDiscsToStorage(discs) {
 
 export async function loadDiscsFromStorage() {
   try {
-    const raw = await AsyncStorage.getItem(DISCS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const rawData = await AsyncStorage.getItem(DISCS_KEY);
+    if(rawData){
+      return JSON.parse(rawData);
+    }
+    else{
+      return [];
+    }
   } catch (e) {
     console.error('Failed to load discs', e);
     return [];
