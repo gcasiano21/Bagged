@@ -6,14 +6,27 @@ import { useDiscs } from '../context/DiscContext';
 export default function BagScreen({ navigation }) {
   const { discs, removeDisc } = useDiscs();
 
-  const renderRightActions = (item) => (
+  const renderRightActions = ({ id }) => (
     <TouchableOpacity
       style={styles.removeBtn}
-      onPress={() => removeDisc(item.id)}
+      onPress={() => removeDisc(id)}
     >
       <Text style={styles.removeText}>Remove</Text>
     </TouchableOpacity>
   );
+
+  function DiscCard({ disc}){
+    return (
+          <Swipeable renderRightActions={() => renderRightActions(disc)}>
+            <View style={styles.card}>
+              <View>
+                <Text style={styles.name}>{disc.name} — {disc.brand}</Text>
+                <Text style={styles.sub}>{disc.type} · {disc.stability} · {disc.weight || '—'}g</Text>
+              </View>
+            </View>
+          </Swipeable>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -21,23 +34,15 @@ export default function BagScreen({ navigation }) {
         data={discs}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text style={styles.empty}>Your bag is empty. Add a disc!</Text>}
-        renderItem={({ item }) => (
-          <Swipeable renderRightActions={() => renderRightActions(item)}>
-            <View style={styles.card}>
-              <View>
-                <Text style={styles.name}>{item.name} — {item.brand}</Text>
-                <Text style={styles.sub}>{item.type} · {item.stability} · {item.weight || '—'}g</Text>
-              </View>
-            </View>
-          </Swipeable>
-        )}
+        renderItem={({ item }) => <DiscCard disc={{item}} />}
+        contentContainerStyle={discs.length === 0 ? { flex: 1, justifyContent: 'center' } : null}
       />
 
       <TouchableOpacity
-        style={styles.fab}
+        style={styles.addDiscButton}
         onPress={() => navigation.navigate('Add Disc')}
       >
-        <Text style={styles.fabText}>+ Add Disc</Text>
+        <Text style={styles.addDiscButtonText}>+ Add Disc</Text>
       </TouchableOpacity>
     </View>
   );
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
   },
   name: { fontWeight: '700' },
   sub: { color: '#666', marginTop: 6 },
-  fab: {
+  addDiscButton: {
     position: 'absolute',
     right: 18,
     bottom: 24,
@@ -65,7 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 24,
   },
-  fabText: { color: '#fff', fontWeight: '700' },
+  addDiscButtonText: { color: '#fff', fontWeight: '700' },
   empty: { textAlign: 'center', marginTop: 30, color: '#666' },
   removeBtn: {
     backgroundColor: '#ff4d4d',
