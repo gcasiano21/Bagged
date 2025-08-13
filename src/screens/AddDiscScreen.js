@@ -5,8 +5,6 @@ import { useDiscs } from '../context/DiscContext';
 import { v4 as uuidv4 } from 'uuid';
 
 
-
-
 export default function AddDiscScreen({ navigation }) {
   const { addDisc } = useDiscs();
   const [name, setName] = useState('');
@@ -17,7 +15,9 @@ export default function AddDiscScreen({ navigation }) {
   const [plastic, setPlastic] = useState('');
 
   function onSave() {
-    if (!name.trim()) return Alert.alert('Name required', 'Give the disc a name.');
+    if (!name.trim()) {
+      return Alert.alert('Name required', 'Give the disc a name.');
+    }
     const disc = {
       id: uuidv4(),
       name: name.trim(),
@@ -26,10 +26,9 @@ export default function AddDiscScreen({ navigation }) {
       stability,
       weight: weight ? Number(weight) : null,
       plastic: plastic.trim() || '',
-      throws: [], 
     };
     addDisc(disc);
-    navigation.goBack();
+    navigation.navigate("My Bag");
   }
 
   return (
