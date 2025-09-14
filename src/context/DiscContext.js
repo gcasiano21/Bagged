@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { loadDiscsFromStorage, saveDiscsToStorage } from '../utils/storage';
 
+
 //Creates the disc context
 const DiscContext = createContext();
 
@@ -30,15 +31,25 @@ export function DiscProvider({ children }) {
   }
 
   function updateDisc(id, patch) {
-    setDiscs(prev => prev.map(d => (disc.id === id ? { ...disc, ...patch } : disc)));
+    setDiscs(prev => prev.map(disc => (disc.id === id ? { ...disc, ...patch } : disc)));
   }
 
   function removeDisc(id) {
     setDiscs(prev => prev.filter(disc => disc.id !== id));
   }
 
+   function addThrow(discId, distance) {
+    setDiscs(prev =>
+      prev.map(disc =>
+        disc.id === discId
+          ? { ...disc, throws: [{ id: Date.now().toString(), distance }, ...(disc.throws || [])] }
+          : disc
+      )
+    );
+  }
+
   return (
-    <DiscContext.Provider value={{ discs, addDisc, updateDisc, removeDisc }}>
+    <DiscContext.Provider value={{ discs, addDisc, updateDisc, removeDisc, addThrow }}>
       {children}
     </DiscContext.Provider>
   );

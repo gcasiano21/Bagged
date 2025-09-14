@@ -8,7 +8,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import HomeScreen from './src/screens/HomeScreen';
 import BagScreen from './src/screens/BagScreen';
 import AddDiscScreen from './src/screens/AddDiscScreen';
+import ThrowTrackerScreen from './src/screens/ThrowTrackerScreen';
 import { DiscProvider } from './src/context/DiscContext';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +23,7 @@ export default function App() {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="My Bag" component={BagScreen} />
             <Tab.Screen name="Add Disc" component={AddDiscScreen} />
+            <Tab.Screen name="Throw Tracker" component={ThrowTrackerScreen} />
           </Tab.Navigator>
         </NavigationContainer>
       </DiscProvider>

@@ -9,8 +9,8 @@ export default function AddDiscScreen({ navigation }) {
   const { addDisc } = useDiscs();
   const [name, setName] = useState('');
   const [brand, setBrand] = useState('');
-  const [type, setType] = useState('Midrange'); 
-  const [stability, setStability] = useState('Stable'); 
+  const [type, setType] = useState(''); 
+  const [stability, setStability] = useState(''); 
   const [weight, setWeight] = useState('');
   const [plastic, setPlastic] = useState('');
 
@@ -22,12 +22,20 @@ export default function AddDiscScreen({ navigation }) {
       id: uuidv4(),
       name: name.trim(),
       brand: brand.trim() || 'Unknown',
-      type,
-      stability,
+      type: type.trim() || 'Midrange',
+      stability: stability.trim() || 'Stable',
       weight: weight ? Number(weight) : null,
       plastic: plastic.trim() || '',
     };
     addDisc(disc);
+
+    setName('');
+    setBrand('');
+    setType('');
+    setStability('');
+    setWeight('');
+    setPlastic('');
+
     navigation.navigate("My Bag");
   }
 

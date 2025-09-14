@@ -1,31 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDiscs } from '../context/DiscContext';
 
 export default function BagScreen({ navigation }) {
   const { discs, removeDisc } = useDiscs();
+  const [expandedDiscId, setExpandedDiscId] = useState(null);
 
-  const renderRightActions = ({ id }) => (
-    <TouchableOpacity
-      style={styles.removeBtn}
-      onPress={() => removeDisc(id)}
-    >
-      <Text style={styles.removeText}>Remove</Text>
-    </TouchableOpacity>
+    const renderRightActions = (disc) => (
+    <View style={{ flexDirection: 'row', paddingRight: 8  }}>
+      <TouchableOpacity
+        style={[styles.swipeBtn, { backgroundColor: '#ff4d4d', marginRight: 8 }]}
+        onPress={() => removeDisc(disc.id)}
+      >
+        <Text style={styles.swipeText}>Remove</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.swipeBtn, { backgroundColor: '#007bff' }]}
+        onPress={() => toggleExpand(disc.id)}
+      >
+        <Text style={styles.swipeText}>View Throws</Text>
+      </TouchableOpacity>
+    </View>
   );
 
+  const toggleExpand = (id) => {
+    setExpandedDiscId(expandedDiscId === id ? null : id);
+  }
+
+
+
+
   function DiscCard({ disc}){
+    const isExpanded = disc.id === expandedDiscId;
     return (
-          <Swipeable renderRightActions={() => renderRightActions(disc)}>
-            <View style={styles.card}>
-              <View>
-                <Text style={styles.name}>{disc.name} — {disc.brand}</Text>
-                <Text style={styles.sub}>{disc.type} · {disc.stability} · {disc.weight || '—'}g</Text>
-              </View>
+      <Swipeable renderRightActions={() => renderRightActions(disc)}>
+        <TouchableOpacity onPress={() => toggleExpand(disc.id)}>
+          <View style={styles.card}>
+            <View>
+              <Text style={styles.name}>{disc.name} — {disc.brand}</Text>
+              <Text style={styles.sub}>{disc.type} · {disc.stability} · {disc.weight || '—'}g</Text>
+
+              {isExpanded && (
+                <View style={{ marginTop: 8, paddingLeft: 12 }}>
+                  <Text style={{ fontWeight: 'bold' }}>Throws:</Text>
+                  {disc.throws?.length > 0 ? (
+                    disc.throws.map((t, i) => (
+                      <Text key={t.id}>{i + 1}. {t.distance} meters</Text>
+                    ))
+                  ) : (
+                    <Text style={{ fontStyle: 'italic' }}>No throws yet</Text>
+                  )}
+                </View>
+              )}
             </View>
-          </Swipeable>
-    )
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
+    );
   }
 
   return (
@@ -34,7 +67,7 @@ export default function BagScreen({ navigation }) {
         data={discs}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text style={styles.empty}>Your bag is empty. Add a disc!</Text>}
-        renderItem={({ item }) => <DiscCard disc={{item}} />}
+        renderItem={({ item })  => <DiscCard disc={item} />}
         contentContainerStyle={discs.length === 0 ? { flex: 1, justifyContent: 'center' } : null}
       />
 
@@ -80,8 +113,16 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 6,
   },
-  removeText: {
+  swipeBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  swipeText: {
     color: '#fff',
     fontWeight: '700',
+    textAlign: 'center',
   },
 });
