@@ -3,6 +3,7 @@ import { View, Text, Button, FlatList, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useDiscs } from '../context/DiscContext';
+import Toast from 'react-native-toast-message';
 
 export default function ThrowTrackerScreen() {
   const { discs, addThrow } = useDiscs();
@@ -21,24 +22,38 @@ export default function ThrowTrackerScreen() {
   const startThrow = async () => {
     if (!selectedDisc) return Alert.alert('Select a disc first!');
     if (!hasPermission) return Alert.alert('Location permission not granted!');
-    const location = await Location.getCurrentPositionAsync({});
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation,
+    });
     setStartLocation(location.coords);
-    Alert.alert('Throw started!', 'Press "End Throw" when you finish.');
+    Toast.show({
+      type: 'info',
+      text1: 'Throw started!',
+      text2: 'Press "End Throw" when you finish.',
+      visibilityTime: 3000, 
+    });
   };
 
   const endThrow = async () => {
     if (!selectedDisc) return Alert.alert('Select a disc first!');
     if (!startLocation) return Alert.alert('Press Start Throw first!');
-    const location = await Location.getCurrentPositionAsync({});
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation,  
+    });
     const distance = getDistanceFromLatLonInMeters(
       startLocation.latitude,
       startLocation.longitude,
       location.coords.latitude,
       location.coords.longitude
     );
-    addThrow(selectedDisc, distance.toFixed(1)); // save in context
+    addThrow(selectedDisc, distance.toFixed(1)); 
     setStartLocation(null);
-    Alert.alert('Throw ended!', `Distance: ${distance.toFixed(1)} meters.`);
+    Toast.show({
+      type: 'info',
+      text1: 'Throw Tracked!',
+      text2: `Distance: ${distance.toFixed(1)} meters.`,
+      visibilityTime: 3000, 
+    });
   };
 
   const getDistanceFromLatLonInMeters = (lat1, lon1, lat2, lon2) => {

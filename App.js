@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; 
+import Toast from 'react-native-toast-message'; 
 
 
 import HomeScreen from './src/screens/HomeScreen';
@@ -26,6 +27,7 @@ export default function App() {
             <Tab.Screen name="Throw Tracker" component={ThrowTrackerScreen} />
           </Tab.Navigator>
         </NavigationContainer>
+        <Toast />
       </DiscProvider>
     </GestureHandlerRootView>
   );
