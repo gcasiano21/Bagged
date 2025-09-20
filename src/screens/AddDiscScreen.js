@@ -108,8 +108,18 @@ export default function AddDiscScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-    label: { marginTop: 12, marginBottom: 6, color: "#333" },
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: "#fff",
+    },
+
+    label: {
+        marginTop: 12,
+        marginBottom: 6,
+        color: "#333",
+    },
+
     input: {
         borderWidth: 1,
         borderColor: "#ddd",
