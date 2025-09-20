@@ -1,7 +1,7 @@
 {
-  "expo": {
-    "name": "DiscAnalyzer",
-    "slug": "DiscAnalyzer",
-    "version": "1.0.0"
-  }
+    "expo": {
+        "name": "DiscAnalyzer",
+        "slug": "DiscAnalyzer",
+        "version": "1.0.0"
+    }
 }
