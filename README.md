@@ -6,7 +6,7 @@ A mobile app using Expo for disc golf players looking to track the discs in thei
 
 - Add and manage discs in your bag
 - Log throws for each disc
-  
+
 ## Current Planned Features
 
 - Tracking max and average distances for each disc
